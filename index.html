@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Amor: Uma Celebração Infinita ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a fonte Montserrat para todo o corpo, Pacifico para títulos */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Evita rolagem horizontal */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23e91e63"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C15.09 3.81 16.76 3 18.5 3 21.58 3 24 5.42 24 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto; /* Cursor de coração */
+            background-color: #1a001a; /* Dark background for theme */
+            color: #f0e0f0; /* Light text color */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Pacifico', cursive;
+            color: #ff69b4; /* Vibrant pink for headings */
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, #330033, #660066); /* Darker gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+            color: #ff69b4; /* Pink text */
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            border: 8px solid #4a004a; /* Dark grey */
+            border-top: 8px solid #ff69b4; /* Pink */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        /* Floating hearts background */
+        .heart-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, #1a001a, #330033); /* Dark gradient */
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            background-color: #8b008b; /* Darker pink heart */
+            transform: rotate(-45deg);
+            animation: float 10s ease-in-out infinite;
+            opacity: 0; /* Starts invisible */
+            filter: drop-shadow(0 0 5px rgba(255, 100, 100, 0.5));
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit; /* Inherits heart color */
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: 50%;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(-45deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { transform: translateY(-500px) translateX(var(--x-offset, 0px)) rotate(-45deg); }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-1000px) translateX(var(--x-offset, 0px)) rotate(-45deg); opacity: 0; }
+        }
+
+        /* Sparkle animation */
+        .sparkle {
+            position: absolute;
+            background-color: #ffcc00; /* Gold sparkle */
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle-float 2s ease-out forwards;
+            box-shadow: 0 0 8px 3px rgba(255, 204, 0, 0.7);
+        }
+
+        @keyframes sparkle-float {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            20% { transform: scale(1) translateY(-10px); opacity: 1; }
+            100% { transform: scale(0.5) translateY(-50px); opacity: 0; }
+        }
+
+        /* Voucher styles */
+        .voucher-card {
+            background-color: #330033; /* Dark background */
+            border: 3px dashed #ff69b4; /* Pink dashed border */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Softer shadow */
+            transition: all 0.4s ease-in-out;
+            border-radius: 20px; /* More rounded */
+            position: relative;
+            color: #f0e0f0; /* Light text */
+        }
+
+        .voucher-card.used {
+            opacity: 0.6;
+            filter: grayscale(80%);
+            border-color: #555555; /* Grey border for used */
+            cursor: not-allowed;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .voucher-card.used button {
+            background-color: #555555;
+            cursor: not-allowed;
+        }
+
+        .voucher-card:not(.used):hover {
+            transform: translateY(-8px) scale(1.03); /* More pronounced movement */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            border-color: #ff007f; /* More vibrant border on hover */
+        }
+
+        /* Button style */
+        .button-primary {
+            background-color: #ff69b4; /* Pink */
+            color: white;
+            padding: 12px 28px; /* Larger padding */
+            border-radius: 9999px; /* Rounded */
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button-primary:hover {
+            background-color: #cc0066; /* Darker pink */
+            transform: translateY(-3px) scale(1.02); /* More subtle movement */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-primary:disabled {
+            background-color: #444444; /* Grey */
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Glitter effect on button hover */
+        .button-primary:not(:disabled):hover::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: glitter 0.5s ease-out forwards;
+        }
+
+        @keyframes glitter {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
+        }
+
+        /* Photo gallery style */
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 20px; /* More rounded */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+            transition: transform 0.4s ease-in-out;
+            border: 3px solid #ff69b4; /* Soft pink border */
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.08); /* More zoom */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: #ff007f;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.15); /* More zoom on image */
+        }
+
+        /* Main section card style */
+        .content-section-card {
+            background-color: rgba(30, 0, 30, 0.9); /* Darker background with transparency */
+            border-radius: 25px; /* Very rounded */
+            padding: 30px;
+            margin-bottom: 2.5rem; /* Spacing adjustment */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 4px solid #8b008b; /* Thicker, softer border */
+            transition: transform 0.3s ease-in-out;
+            color: #f0e0f0; /* Light text */
+        }
+
+        .content-section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom message styles */
+        #custom-message-box {
+            animation: fade-in-out 3.5s forwards;
+        }
+
+        @keyframes fade-in-out {
+            0% { opacity: 0; transform: translateY(-20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        #custom-confirm-box > div {
+            animation: pop-in 0.3s ease-out forwards;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Quiz specific styles */
+        .quiz-option {
+            background-color: #4a004a; /* Darker background for options */
+            border: 2px solid #8b008b;
+            padding: 12px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-weight: 500;
+            color: #f0e0f0; /* Light text */
+        }
+
+        .quiz-option:hover:not(.selected):not(.disabled) {
+            background-color: #660066;
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-option.selected {
+            background-color: #ff69b4; /* Vibrant pink when selected */
+            color: white;
+            border-color: #cc0066;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-option.correct {
+            background-color: #28a745; /* Green for correct */
+            color: white;
+            border-color: #1e7e34;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #dc3545; /* Red for incorrect */
+            color: white;
+            border-color: #bd2130;
+        }
+
+        .quiz-option.disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Hides main content by default */
+        #main-content-locked {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease-out, visibility 1.5s ease-out, transform 1.5s ease-out;
+            height: 0; /* Starts with height 0 to not take up space */
+            overflow: hidden; /* Ensures content doesn't overflow */
+        }
+
+        #main-content-locked.unlocked {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            height: auto; /* Returns to normal height */
+        }
+
+        /* Music controls styles */
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(30, 0, 30, 0.8); /* Dark background with transparency */
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: fixed; /* Fixed on screen */
+            bottom: 20px; /* 20px from bottom */
+            left: 50%; /* Horizontally centered */
+            transform: translateX(-50%); /* Adjustment to center */
+            z-index: 500; /* Above other elements, but below overlay */
+        }
+
+        .music-controls button {
+            background-color: #ff69b4;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-controls button:hover {
+            background-color: #cc0066;
+            transform: translateY(-2px);
+        }
+
+        .music-controls button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-controls button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-indigo-900 min-h-screen flex flex-col justify-center items-center relative">
+
+    <div class="heart-background"></div>
+
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p class="text-3xl font-semibold loading-text">Desvendando os segredos do nosso amor...</p>
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="musica.mp3" type="audio/mp3">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <main class="container mx-auto px-4 py-8 text-center relative z-10 max-w-4xl w-full">
+        <section id="quiz-gate" class="content-section-card animate-fade-in-down">
+            <h2 class="text-4xl font-semibold mb-6 drop-shadow-md">Um Desafio do Nosso Coração! 😉</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Antes de mergulharmos em nossas memórias, teste seu conhecimento sobre nós! ✨
+            </p>
+
+            <div class="mb-8 p-6 bg-purple-900 rounded-xl border border-purple-700">
+                <p class="text-2xl font-medium mb-4">Qual é o dia mágico que iniciamos nossa jornada juntos?</p>
+                <div id="date-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto mb-6">
+                    <div class="quiz-option" data-date="14 de Julho de 2023">14 de Julho de 2023</div>
+                    <div class="quiz-option" data-date="14 de Junho de 2024">14 de Junho de 2024</div>
+                    <div class="quiz-option" data-date="25 de Dezembro de 2023">25 de Dezembro de 2023</div>
+                    <div class="quiz-option" data-date="01 de Janeiro de 2024">01 de Janeiro de 2024</div>
+                </div>
+                <button id="check-dating-date-answer" class="button-primary px-8 py-3 text-lg">
+                    Confirmar Data
+                </button>
+                <p id="dating-date-feedback" class="mt-4 text-lg font-semibold"></p>
+            </div>
+
+            <div class="p-6 bg-purple-900 rounded-xl border border-purple-700">
+                <p class="text-2xl font-medium mb-4">Qual é a cor que mais representa a alegria no meu mundo?</p>
+                <div id="color-options" class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-6">
+                    <div class="quiz-option" data-color="Azul">Azul</div>
+                    <div class="quiz-option" data-color="Rosa">Rosa</div>
+                    <div class="quiz-option" data-color="Verde">Verde</div>
+                    <div class="quiz-option" data-color="Amarelo">Amarelo</div>
+                </div>
+                <button id="check-color-answer" class="button-primary px-8 py-3 text-lg">
+                    Revelar Resposta
+                </button>
+                <p id="color-feedback" class="mt-4 text-lg font-semibold"></p>
+            </div>
+        </section>
+
+        <div id="main-content-locked">
+            <h1 class="text-6xl md:text-7xl font-bold mb-8 drop-shadow-lg animate-fade-in-down">
+                Feliz Dia dos Namorados, Minha Vida!
+            </h1>
+
+            <div class="content-section-card max-w-2xl mx-auto animate-fade-in">
+                <p class="text-xl md:text-2xl leading-relaxed text-fuchsia-200">
+                    Oiiii, moh 😍, eu te amo muito 💖, sabia? Desde aquele dia da sala que nós quase demos um selinho 😳, eu sabia que queria ficar contigo 💘. Por isso, não quero terminar, nem vou, moh 🙅‍♂️. Eu gosto muito de você 💕. Eu te amo, mohhh 😚❤️.
+                </p>
+            </div>
+
+            <div class="content-section-card animate-fade-in-up">
+                <h2 class="text-4xl font-semibold mb-4">Nosso Amor Floresce Há:</h2>
+                <div id="countdown" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-fuchsia-300 font-bold text-3xl md:text-4xl">
+                    <div><span id="years">0</span> <span class="text-xl block text-fuchsia-400">Anos</span></div>
+                    <div><span id="months">0</span> <span class="text-xl block text-fuchsia-400">Meses</span></div>
+                    <div><span id="days">0</span> <span class="text-xl block text-fuchsia-400">Dias</span></div>
+                    <div><span id="hours">0</span> <span class="text-xl block text-fuchsia-400">Horas</span></div>
+                    <div><span id="minutes">0</span> <span class="text-xl block text-fuchsia-400">Minutos</span></div>
+                    <div><span id="seconds">0</span> <span class="text-xl block text-fuchsia-400">Segundos</span></div>
+                </div>
+                <p class="text-lg text-fuchsia-400 mt-6">Desde o nosso inesquecível 14 de Junho de 2024</p>
+            </div>
+
+            <section class="content-section-card animate-fade-in">
+                <h2 class="text-4xl font-semibold mb-6 drop-shadow-md">Nossa Galeria de Corações e Risadas</h2>
+                <p class="text-lg text-fuchsia-200 mb-8 max-w-2xl mx-auto">
+                    Cada foto um pedacinho da nossa história, cada sorriso um eco da nossa felicidade. Deslize e reviva nossos momentos mais preciosos!
+                </p>
+                <div id="gallery-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+            </section>
+
+            <section class="content-section-card animate-fade-in">
+                <h2 class="text-4xl font-semibold mb-6 drop-shadow-md">Seus Vales do Amor Infinito!</h2>
+                <p class="text-lg text-fuchsia-200 mb-8 max-w-2xl mx-auto">
+                    Prepare-se para surpresas! Estes vales foram feitos com todo o meu carinho, para você resgatar e tornar nossos dias ainda mais especiais. Escolha com sabedoria, pois cada um é único!
+                </p>
+                <div id="voucher-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    </div>  
+            </section>
+
+            <section class="content-section-card animate-fade-in">
+                <h2 class="text-3xl font-semibold mb-4">Para a Mulher da minha vida...</h2>
+                <p class="text-lg leading-relaxed text-fuchsia-200">
+                    Oi, moh 😍
+
+Eu tava aqui pensando em nós, e eu precisava escrever isso, porque meu coração não aguenta guardar tanto sentimento assim 💌. Desde aquele dia na sala, lembra? Aquele momento que a gente quase se beijou 😳, eu senti algo diferente, algo que me fez ter certeza de uma coisa: eu queria estar contigo. Não só naquele dia, mas em todos os dias depois dele 💭💘.
+
+Desde então, cada conversa nossa, cada risada boba 🤭, cada zoeira, até os momentos de silêncio… tudo me fez gostar mais ainda de você. E é por isso que, mesmo com qualquer dificuldade, eu não quero — e nem vou — desistir da gente 🚫❤️.
+
+Eu te amo de um jeito que nem cabe direito em palavras. É aquele amor que dá vontade de cuidar, de proteger, de fazer você sorrir todo dia 😌✨. E se em algum momento parecer que o mundo tá virando de cabeça pra baixo, lembra que eu tô aqui, moh, firme com você 💪💞.
+
+Então não vem com essa de terminar, porque eu não quero perder tudo isso que a gente construiu. Você é especial demais pra mim, e eu quero continuar vivendo essa história com você, escrevendo cada capítulo juntinhos 📖🌹.
+
+Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
+                </p>
+                <p class="text-xl font-bold text-fuchsia-400 mt-6">Com todo o meu amor e admiração, Joao Pedro G. Jordão</p>
+            </section>
+        </div>
+    </main>
+
+    <div id="music-controls" class="music-controls">
+        <button id="prev-music-button" title="Música Anterior">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button id="play-pause-music-button" title="Tocar/Pausar Música">
+            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hidden"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+        </button>
+        <button id="next-music-button" title="Próxima Música">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6h2v12h-2z"/></svg>
+        </button>
+        <span id="current-song-info" class="text-fuchsia-300 font-semibold text-sm hidden sm:block"></span>
+    </div>
+
+    <script>
+        // Start date of the relationship
+        const startDate = new Date('2024-06-14T00:00:00'); // June 14, 2024
+
+        // Main elements
+        const quizGate = document.getElementById('quiz-gate');
+        const mainContentLocked = document.getElementById('main-content-locked');
+        
+        // Date quiz elements
+        const dateOptionsContainer = document.getElementById('date-options');
+        const dateOptions = document.querySelectorAll('#date-options .quiz-option');
+        const checkDatingDateButton = document.getElementById('check-dating-date-answer');
+        const datingDateFeedback = document.getElementById('dating-date-feedback');
+
+        // Color quiz elements
+        const colorOptionsContainer = document.getElementById('color-options');
+        const colorOptions = document.querySelectorAll('#color-options .quiz-option');
+        const checkColorAnswerButton = document.getElementById('check-color-answer');
+        const colorFeedback = document.getElementById('color-feedback');
+
+        // Gallery element
+        const galleryContainer = document.getElementById('gallery-container');
+
+        // Music controls
+        const backgroundMusic = document.getElementById('background-music');
+        const playPauseButton = document.getElementById('play-pause-music-button');
+        const prevMusicButton = document.getElementById('prev-music-button');
+        const nextMusicButton = document.getElementById('next-music-button');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const currentSongInfo = document.getElementById('current-song-info');
+
+        // Quiz state
+        let isDatingDateAnsweredCorrectly = false;
+        let isColorAnsweredCorrectly = false;
+        let selectedDatingDate = null;
+        let selectedColor = null;
+
+        const correctDatingDate = "14 de Junho de 2024";
+        const correctColor = "Azul";
+
+        // --- GALLERY DATA ---
+        const galleryItems = [];
+        for (let i = 1; i <= 100; i++) {
+            galleryItems.push({
+                imageUrl: `Fotos/Foto${i}/imagem.png`,
+                description: `Momento especial ${i} da nossa história!`
+            });
+        }
+
+        // --- MUSIC PLAYLIST ---
+        // ATTENTION, JOAO PEDRO!
+        // Add paths to your music here.
+        // Make sure music files (e.g., musica2.mp3, musica3.mp3)
+        // are in the same directory as this 'index.html' file.
+        const playlist = [
+            { src: "musica.mp3", title: "VIDAAAAAA" },
+            { src: "musica2.mp3", title: "Mohhhhhh" },
+            { src: "musica4.mp3", title: "VIDAAAAAAAAAAA" }
+            // Add more songs here if desired:
+            // { src: "path/to/your_music4.mp3", title: "Song Title 4" },
+            // { src: "path/to/your_music5.mp3", title: "Song Title 5" }
+        ];
+        let currentSongIndex = 0;
+
+        // --- Music Functions ---
+        function loadSong(index) {
+            if (playlist.length === 0) {
+                console.warn("Empty playlist, no music to load.");
+                currentSongInfo.textContent = "Nenhuma música na playlist.";
+                return;
+            }
+            const song = playlist[index];
+            backgroundMusic.src = song.src;
+            currentSongInfo.textContent = `Tocando: ${song.title}`;
+            // Preload the song to avoid delays when playing
+            backgroundMusic.load();
+        }
+
+        function playSong() {
+            backgroundMusic.play().then(() => {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }).catch(error => {
+                console.log('Erro ao tentar tocar música:', error);
+                // Could be due to autoplay restrictions. User will have to interact.
+            });
+        }
+
+        function pauseSong() {
+            backgroundMusic.pause();
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+        }
+
+        function togglePlayPause() {
+            if (backgroundMusic.paused) {
+                playSong();
+            } else {
+                pauseSong();
+            }
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+            playSong();
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            loadSong(currentSongIndex);
+            playSong();
+        }
+
+        // --- Core Functions ---
+
+        // Function to update the countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diff = now.getTime() - startDate.getTime(); // Difference in milliseconds
+
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            const totalMonths = Math.floor(days / 30.44);
+            const years = Math.floor(totalMonths / 12);
+            const remainingMonths = totalMonths % 12;
+
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = remainingMonths;
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+
+        // Vouchers array (JSON)
+        let vouchers = [
+            { id: 1, description: "Um jantar romântico feito por mim", used: false },
+            { id: 2, description: "Uma massagem relaxante de 30 minutos", used: false },
+            { id: 3, description: "Um dia inteiro de 'o que você quiser'", used: false },
+            { id: 4, description: "Um abraço apertado e demorado", used: false },
+            { id: 5, description: "Uma noite de filmes e pipoca", used: false },
+            { id: 6, description: "Um café na cama no fim de semana", used: false },
+            { id: 7, description: "Um vale para uma sessão de carinho", used: false },
+            { id: 8, description: "Um vale para uma maratona de séries juntos", used: false },
+            { id: 9, description: "Um vale para uma sobremesa especial feita por mim", used: false },
+            { id: 10, description: "Um vale para uma caminhada de mãos dadas", used: false },
+            { id: 11, description: "Um vale para um piquenique surpresa", used: false },
+            { id: 12, description: "Um vale para uma noite de jogos", used: false },
+            { id: 13, description: "Um vale voce escolhe", used: false },
+            { id: 14, description: "Um vale para uma declaração de amor inesperada", used: false },
+            { id: 15, description: "Um vale para um beijo roubado", used: false },
+            { id: 16, description: "Um vale voce escolhe", used: false },
+            { id: 17, description: "Um vale doce", used: false },
+            { id: 18, description: "Um vale para um cafuné demorado", used: false },
+            { id: 19, description: "Um vale para uma sessão de fotos românticas", used: false },
+            { id: 20, description: "Um vale para fazer algo na rua (a combinar)", used: false },
+            { id: 21, description: "Um vale para um presente feito à mão", used: false },
+            { id: 22, description: "Um vale para uma sessão de dança divertida", used: false },
+            { id: 23, description: "Um vale para assistir o nascer/pôr do sol juntos", used: false },
+            { id: 24, description: "Um vale para um dia sem tecnologia, só nós dois", used: false },
+            { id: 25, description: "Um vale para uma carta de amor escrita à mão", used: false },
+            { id: 26, description: "Um vale para um desejo a ser realizado por mim", used: false },
+            { id: 27, description: "Um vale para um dia de bagunças, sem perguntas", used: false },
+            { id: 28, description: "Um vale para uma playlist de músicas do nosso amor", used: false },
+            { id: 29, description: "Um vale para uma noite de observação das estrelas", used: false },
+            { id: 30, description: "Um vale voce escolhe", used: false }
+        ];
+
+        // Load voucher state from localStorage
+        function loadVouchers() {
+            const storedVouchers = localStorage.getItem('valentinesVouchers');
+            if (storedVouchers) {
+                // When loading, ensure new vouchers are added if the stored array is smaller
+                const loaded = JSON.parse(storedVouchers);
+                // Map loaded vouchers to an object for easy ID access
+                const loadedMap = new Map(loaded.map(v => [v.id, v]));
+
+                // Create a new voucher array, using the stored state if it exists, otherwise use the default state
+                vouchers = vouchers.map(defaultVoucher => {
+                    if (loadedMap.has(defaultVoucher.id)) {
+                        return loadedMap.get(defaultVoucher.id);
+                    }
+                    return defaultVoucher;
+                });
+            }
+        }
+
+        // Save voucher state to localStorage
+        function saveVouchers() {
+            localStorage.setItem('valentinesVouchers', JSON.stringify(vouchers));
+        }
+
+        // Render vouchers on the page
+        function renderVouchers() {
+            const voucherListDiv = document.getElementById('voucher-list');
+            voucherListDiv.innerHTML = '';
+
+            vouchers.forEach(voucher => {
+                const voucherCard = document.createElement('div');
+                voucherCard.className = `voucher-card p-6 rounded-2xl flex flex-col justify-between items-center text-fuchsia-100 transition-all duration-300 ${voucher.used ? 'used' : ''}`;
+
+                voucherCard.innerHTML = `
+                    <p class="text-lg font-medium text-center mb-4">${voucher.description}</p>
+                    <button data-id="${voucher.id}" class="button-primary text-sm px-6 py-3 rounded-full shadow-md">
+                        ${voucher.used ? 'Vale Resgatado!' : 'Resgatar Vale'}
+                    </button>
+                    ${voucher.used ? '<span class="absolute top-2 right-2 text-fuchsia-400 font-bold text-xs bg-purple-800 px-2 py-1 rounded-full opacity-80">USADO</span>' : ''}
+                `;
+
+                const button = voucherCard.querySelector('button');
+                if (voucher.used) {
+                    button.disabled = true;
+                } else {
+                    button.addEventListener('click', () => {
+                        showCustomConfirm('Tem certeza que deseja resgatar este vale?', () => {
+                            useVoucher(voucher.id);
+                        });
+                    });
+                }
+                voucherListDiv.appendChild(voucherCard);
+            });
+        }
+
+        // Function to use a voucher
+        function useVoucher(id) {
+            const voucherIndex = vouchers.findIndex(v => v.id === id);
+            if (voucherIndex !== -1 && !vouchers[voucherIndex].used) {
+                vouchers[voucherIndex].used = true;
+                saveVouchers();
+                renderVouchers();
+                showMessage('Vale resgatado com sucesso! 🎉', 'success');
+            } else if (vouchers[voucherIndex].used) {
+                showMessage('Este vale já foi resgatado!', 'info');
+            }
+        }
+
+        // Render photo gallery
+        function renderGallery() {
+            const galleryContainer = document.getElementById('gallery-container');
+            galleryContainer.innerHTML = ''; // Clears existing gallery
+
+            galleryItems.forEach(item => {
+                const img = new Image(); // Creates an Image object in memory
+                img.src = item.imageUrl;
+
+                img.onload = () => {
+                    // If image loads, create gallery element and add it
+                    const galleryItemDiv = document.createElement('div');
+                    galleryItemDiv.className = 'gallery-item';
+                    galleryItemDiv.innerHTML = `
+                        <img src="${item.imageUrl}" alt="${item.description}" class="w-full h-auto">
+                        <p class="text-sm text-fuchsia-200 p-4 text-center">${item.description}</p>
+                    `;
+                    galleryContainer.appendChild(galleryItemDiv);
+                };
+
+                img.onerror = () => {
+                    // If image does NOT load, simply do nothing.
+                    // This prevents 'gallery-item' from being added.
+                    console.warn(`Erro ao carregar imagem: ${item.imageUrl}. Não será exibida na galeria.`);
+                };
+            });
+        }
+
+        // Floating hearts animation
+        function createHeart() {
+            const heartBackground = document.querySelector('.heart-background');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const size = Math.random() * 25 + 15;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDuration = `${Math.random() * 6 + 7}s`;
+            heart.style.animationDelay = `${Math.random() * 2}s`;
+            heart.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 200}px`);
+
+            const colors = ['#ff69b4', '#8b008b', '#ff007f', '#cc0066'];
+            heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            heartBackground.appendChild(heart);
+
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+
+        // Sparkle animation
+        function createSparkle() {
+            const mainContent = document.querySelector('main');
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            const size = Math.random() * 4 + 2;
+            sparkle.style.width = `${size}px`;
+            sparkle.style.height = `${size}px`;
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.top = `${Math.random() * 100}%`;
+            mainContent.appendChild(sparkle);
+
+            sparkle.addEventListener('animationend', () => {
+                sparkle.remove();
+            });
+        }
+
+        // --- Custom Message Functions (in place of alert/confirm) ---
+
+        let currentMessageTimeout;
+
+        function showMessage(message, type = 'default') {
+            const existingMessage = document.getElementById('custom-message-box');
+            if (existingMessage) {
+                existingMessage.remove();
+                clearTimeout(currentMessageTimeout);
+            }
+
+            const messageBox = document.createElement('div');
+            messageBox.id = 'custom-message-box';
+            messageBox.className = `fixed top-5 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 opacity-0 transform-gpu translate-y-[-20px]`;
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-600', 'text-white');
+            } else if (type === 'info') {
+                messageBox.classList.add('bg-blue-600', 'text-white');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-600', 'text-white');
+            } else {
+                messageBox.classList.add('bg-gray-700', 'text-white');
+            }
+
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+        }
+
+        function showCustomConfirm(message, onConfirm) {
+            const existingConfirm = document.getElementById('custom-confirm-box');
+            if (existingConfirm) existingConfirm.remove();
+
+            const confirmBox = document.createElement('div');
+            confirmBox.id = 'custom-confirm-box';
+            confirmBox.className = `fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50`;
+
+            confirmBox.innerHTML = `
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl max-w-sm w-full text-center text-white">
+                    <p class="text-lg mb-6">${message}</p>
+                    <div class="flex justify-around">
+                        <button id="confirm-yes" class="button-primary bg-green-600 hover:bg-green-700 px-6 py-2">Sim</button>
+                        <button id="confirm-no" class="button-primary bg-red-600 hover:bg-red-700 px-6 py-2">Não</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmBox);
+
+            document.getElementById('confirm-yes').addEventListener('click', () => {
+                onConfirm();
+                confirmBox.remove();
+            });
+
+            document.getElementById('confirm-no').addEventListener('click', () => {
+                confirmBox.remove();
+            });
+        }
+
+        // --- Quiz Logic and Unlock ---
+
+        function checkUnlockConditions() {
+            if (isDatingDateAnsweredCorrectly && isColorAnsweredCorrectly) {
+                unlockWebsite();
+            }
+        }
+
+        function unlockWebsite() {
+            quizGate.style.display = 'none'; // Hides quiz section
+            mainContentLocked.classList.add('unlocked'); // Shows main content with transition
+
+            // Starts animations and music after unlock
+            setInterval(updateCountdown, 1000); // Starts countdown
+            setInterval(createHeart, 500); // Hearts
+            setInterval(createSparkle, 150); // Sparkles
+
+            // Starts music and shows controls
+            loadSong(currentSongIndex);
+            playSong();
+            document.getElementById('music-controls').classList.remove('hidden'); // Ensures controls are visible
+        }
+
+        function loadQuizState() {
+            // Load dating date question state
+            const storedDatingDateAnswered = localStorage.getItem('datingDateAnswered');
+            const storedSelectedDatingDate = localStorage.getItem('selectedDatingDate');
+
+            if (storedDatingDateAnswered === 'true' && storedSelectedDatingDate === correctDatingDate) { // Only considers correct if answered correctly
+                isDatingDateAnsweredCorrectly = true;
+                checkDatingDateButton.disabled = true;
+                datingDateFeedback.textContent = '🥳 Resposta correta! Você se lembra de tudo!';
+                datingDateFeedback.classList.add('text-green-400');
+                dateOptions.forEach(option => {
+                    option.classList.add('disabled');
+                    if (option.dataset.date === correctDatingDate) {
+                        option.classList.add('correct');
+                    }
+                });
+            } else {
+                // If incorrect or not answered, allows new attempts
+                isDatingDateAnsweredCorrectly = false;
+                checkDatingDateButton.disabled = false;
+                dateOptions.forEach(option => {
+                    option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
+                });
+                datingDateFeedback.textContent = '';
+                if (storedSelectedDatingDate && storedSelectedDatingDate !== correctDatingDate) {
+                    // If she tried before and was wrong, show a reminder
+                    datingDateFeedback.textContent = `Você tentou '${storedSelectedDatingDate}' da última vez. Tente novamente! 😉`;
+                    datingDateFeedback.classList.add('text-fuchsia-400');
+                }
+            }
+
+
+            // Load color question state
+            const storedColorAnswered = localStorage.getItem('colorAnswered');
+            const storedSelectedColor = localStorage.getItem('selectedColor');
+
+            if (storedColorAnswered === 'true' && storedSelectedColor === correctColor) { // Only considers correct if answered correctly
+                isColorAnsweredCorrectly = true;
+                checkColorAnswerButton.disabled = true;
+                colorFeedback.textContent = '🥳 Resposta correta! Você é incrível!';
+                colorFeedback.classList.add('text-green-400');
+                colorOptions.forEach(option => {
+                    option.classList.add('disabled');
+                    if (option.dataset.color === correctColor) {
+                        option.classList.add('correct');
+                    }
+                });
+            } else {
+                // If incorrect or not answered, allows new attempts
+                isColorAnsweredCorrectly = false;
+                checkColorAnswerButton.disabled = false;
+                colorOptions.forEach(option => {
+                    option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
+                });
+                colorFeedback.textContent = '';
+                if (storedSelectedColor && storedSelectedColor !== correctColor) {
+                    // If she tried before and was wrong, show a reminder
+                    colorFeedback.textContent = `Você tentou '${storedSelectedColor}' da última vez. Tente novamente! 😉`;
+                    colorFeedback.classList.add('text-fuchsia-400');
+                }
+            }
+
+            checkUnlockConditions();
+        }
+
+        function setupQuizListeners() {
+            // Listener for date selection
+            dateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Only allows selection if the answer hasn't been corrected yet
+                    if (!isDatingDateAnsweredCorrectly) {
+                        dateOptions.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+                        this.classList.add('selected');
+                        selectedDatingDate = this.dataset.date;
+                        datingDateFeedback.textContent = ''; // Clears previous feedback
+                    }
+                });
+            });
+
+            // Listener to check date answer
+            checkDatingDateButton.addEventListener('click', function() {
+                if (isDatingDateAnsweredCorrectly) { // If already correct, do nothing
+                    showMessage('Você já respondeu essa pergunta corretamente! 😊', 'info');
+                    return;
+                }
+                if (selectedDatingDate) {
+                    // Remove feedback classes from all options before checking
+                    dateOptions.forEach(option => option.classList.remove('correct', 'incorrect'));
+
+                    if (selectedDatingDate === correctDatingDate) {
+                        localStorage.setItem('datingDateAnswered', 'true'); // Saves as correct
+                        localStorage.setItem('selectedDatingDate', selectedDatingDate); // Saves the correct answer
+                        isDatingDateAnsweredCorrectly = true;
+                        this.disabled = true; // Disables the button
+
+                        document.querySelector(`.quiz-option[data-date="${correctDatingDate}"]`).classList.add('correct');
+                        datingDateFeedback.textContent = '🥳 Resposta correta! Você se lembra de tudo!';
+                        datingDateFeedback.classList.remove('text-red-600', 'text-fuchsia-400');
+                        datingDateFeedback.classList.add('text-green-400');
+                        showMessage('Data correta! Que memória incrível! ❤️', 'success');
+
+                        dateOptions.forEach(option => option.classList.add('disabled')); // Disables all options
+                        
+                    } else {
+                        // If incorrect, just show feedback, don't save as "answered"
+                        selectedDatingDate = null; // Resets selection for next attempt
+                        dateOptions.forEach(opt => opt.classList.remove('selected')); // Removes incorrect selection
+                        datingDateFeedback.textContent = `Ops! A data selecionada não é a correta. Tente novamente! 😉`;
+                        datingDateFeedback.classList.remove('text-green-400');
+                        datingDateFeedback.classList.add('text-red-400');
+                        showMessage(`Não foi dessa vez. Tente novamente! 😉`, 'info');
+                    }
+                    checkUnlockConditions();
+                } else {
+                    showMessage('Por favor, selecione uma data antes de verificar.', 'info');
+                }
+            });
+
+            // Listener for color selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Only allows selection if the answer hasn't been corrected yet
+                    if (!isColorAnsweredCorrectly) {
+                        colorOptions.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+                        this.classList.add('selected');
+                        selectedColor = this.dataset.color;
+                        colorFeedback.textContent = ''; // Clears previous feedback
+                    }
+                });
+            });
+
+            // Listener to check color answer
+            checkColorAnswerButton.addEventListener('click', function() {
+                if (isColorAnsweredCorrectly) { // If already correct, do nothing
+                    showMessage('Você já respondeu essa pergunta corretamente! 😊', 'info');
+                    return;
+                }
+                if (selectedColor) {
+                    // Remove feedback classes from all options before checking
+                    colorOptions.forEach(option => option.classList.remove('correct', 'incorrect'));
+
+                    if (selectedColor === correctColor) {
+                        localStorage.setItem('colorAnswered', 'true'); // Saves as correct
+                        localStorage.setItem('selectedColor', selectedColor); // Saves the correct answer
+                        isColorAnsweredCorrectly = true;
+                        this.disabled = true; // Disables the button
+
+                        document.querySelector(`.quiz-option[data-color="${correctColor}"]`).classList.add('correct');
+                        colorFeedback.textContent = '🥳 Resposta correta! Você é incrível!';
+                        colorFeedback.classList.remove('text-red-400', 'text-fuchsia-400');
+                        colorFeedback.classList.add('text-green-400');
+                        showMessage('Acertou! Parabéns, meu amor! ✨', 'success');
+
+                        colorOptions.forEach(option => option.classList.add('disabled')); // Disables all options
+                        
+                    } else {
+                        // If incorrect, just show feedback, don't save as "answered"
+                        selectedColor = null; // Resets selection for next attempt
+                        colorOptions.forEach(opt => opt.classList.remove('selected')); // Removes incorrect selection
+                        colorFeedback.textContent = `Ops! A cor selecionada não é a correta. Tente novamente! 😉`;
+                        colorFeedback.classList.remove('text-green-400');
+                        colorFeedback.classList.add('text-red-400');
+                        showMessage(`Não foi dessa vez. Tente novamente! 😉`, 'info');
+                    }
+                    checkUnlockConditions();
+                } else {
+                    showMessage('Por favor, selecione uma cor antes de verificar.', 'info');
+                }
+            });
+        }
+
+        // --- Loading Events ---
+
+        window.addEventListener('load', () => {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.add('hidden');
+
+            loadVouchers();
+            renderVouchers();
+            renderGallery(); // Renders the gallery on load
+            loadQuizState(); // Calls to load state and set up the interface
+            setupQuizListeners(); // Sets up quiz button listeners
+
+            // The checkUnlockConditions() call is already within loadQuizState() and the listeners.
+            // Here, we just ensure the initial visibility is correct.
+            if (!(isDatingDateAnsweredCorrectly && isColorAnsweredCorrectly)) {
+                quizGate.style.display = 'block';
+                mainContentLocked.classList.remove('unlocked');
+                document.getElementById('music-controls').classList.add('hidden'); // Hides music controls
+            } else {
+                quizGate.style.display = 'none';
+                mainContentLocked.classList.add('unlocked');
+                loadSong(currentSongIndex); // Loads the first song
+                // Does not start playing here, but shows controls.
+                document.getElementById('music-controls').classList.remove('hidden'); // Shows music controls
+            }
+
+            // Adds listeners for music buttons
+            playPauseButton.addEventListener('click', togglePlayPause);
+            prevMusicButton.addEventListener('click', prevSong);
+            nextMusicButton.addEventListener('click', nextSong);
+            // When music ends, plays the next one automatically
+            backgroundMusic.addEventListener('ended', nextSong);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainElements = document.querySelectorAll('.animate-fade-in-down, .animate-fade-in, .animate-fade-in-up');
+            mainElements.forEach((el, index) => {
+                el.style.animationDelay = `${0.5 + index * 0.1}s`;
+            });
+        });
+    </script>
+    <style>
+        @keyframes fade-in-down {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-down {
+            animation: fade-in-down 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animate-fade-in {
+            animation: fade-in 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.8s ease-out forwards;
+            opacity: 0;
+        }
+    </style>
+</body>
+</html>
