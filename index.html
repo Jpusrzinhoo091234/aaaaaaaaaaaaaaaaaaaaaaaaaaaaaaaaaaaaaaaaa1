@@ -540,7 +540,7 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
         const pauseIcon = document.getElementById('pause-icon');
         const currentSongInfo = document.getElementById('current-song-info');
 
-        // Quiz state
+        // Quiz state (now temporary for the session)
         let isDatingDateAnsweredCorrectly = false;
         let isColorAnsweredCorrectly = false;
         let selectedDatingDate = null;
@@ -647,62 +647,23 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
             document.getElementById('seconds').textContent = seconds;
         }
 
-        // Vouchers array (JSON)
-        let vouchers = [
-            { id: 1, description: "Um jantar romântico feito por mim", used: false },
-            { id: 2, description: "Uma massagem relaxante de 30 minutos", used: false },
-            { id: 3, description: "Um dia inteiro de 'o que você quiser'", used: false },
-            { id: 4, description: "Um abraço apertado e demorado", used: false },
-            { id: 5, description: "Uma noite de filmes e pipoca", used: false },
-            { id: 6, description: "Um café na cama no fim de semana", used: false },
-            { id: 7, description: "Um vale para uma sessão de carinho", used: false },
-            { id: 8, description: "Um vale para uma maratona de séries juntos", used: false },
-            { id: 9, description: "Um vale para uma sobremesa especial feita por mim", used: false },
-            { id: 10, description: "Um vale para uma caminhada de mãos dadas", used: false },
-            { id: 11, description: "Um vale para um piquenique surpresa", used: false },
-            { id: 12, description: "Um vale para uma noite de jogos", used: false },
-            { id: 13, description: "Um vale voce escolhe", used: false },
-            { id: 14, description: "Um vale para uma declaração de amor inesperada", used: false },
-            { id: 15, description: "Um vale para um beijo roubado", used: false },
-            { id: 16, description: "Um vale voce escolhe", used: false },
-            { id: 17, description: "Um vale doce", used: false },
-            { id: 18, description: "Um vale para um cafuné demorado", used: false },
-            { id: 19, description: "Um vale para uma sessão de fotos românticas", used: false },
-            { id: 20, description: "Um vale para fazer algo na rua (a combinar)", used: false },
-            { id: 21, description: "Um vale para um presente feito à mão", used: false },
-            { id: 22, description: "Um vale para uma sessão de dança divertida", used: false },
-            { id: 23, description: "Um vale para assistir o nascer/pôr do sol juntos", used: false },
-            { id: 24, description: "Um vale para um dia sem tecnologia, só nós dois", used: false },
-            { id: 25, description: "Um vale para uma carta de amor escrita à mão", used: false },
-            { id: 26, description: "Um vale para um desejo a ser realizado por mim", used: false },
-            { id: 27, description: "Um vale para um dia de bagunças, sem perguntas", used: false },
-            { id: 28, description: "Um vale para uma playlist de músicas do nosso amor", used: false },
-            { id: 29, description: "Um vale para uma noite de observação das estrelas", used: false },
-            { id: 30, description: "Um vale voce escolhe", used: false }
-        ];
+        // Vouchers array - will be loaded from vouchers.json
+        let vouchers = [];
 
-        // Load voucher state from localStorage
-        function loadVouchers() {
-            const storedVouchers = localStorage.getItem('valentinesVouchers');
-            if (storedVouchers) {
-                // When loading, ensure new vouchers are added if the stored array is smaller
-                const loaded = JSON.parse(storedVouchers);
-                // Map loaded vouchers to an object for easy ID access
-                const loadedMap = new Map(loaded.map(v => [v.id, v]));
-
-                // Create a new voucher array, using the stored state if it exists, otherwise use the default state
-                vouchers = vouchers.map(defaultVoucher => {
-                    if (loadedMap.has(defaultVoucher.id)) {
-                        return loadedMap.get(defaultVoucher.id);
-                    }
-                    return defaultVoucher;
-                });
+        // Function to load vouchers from vouchers.json
+        async function loadVouchers() {
+            try {
+                // Fetch the static vouchers.json file
+                const response = await fetch('vouchers.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                vouchers = await response.json();
+                renderVouchers(); // Render after loading
+            } catch (error) {
+                console.error('Erro ao carregar vouchers:', error);
+                showMessage('Não foi possível carregar os vales. Tente novamente mais tarde.', 'error');
             }
-        }
-
-        // Save voucher state to localStorage
-        function saveVouchers() {
-            localStorage.setItem('valentinesVouchers', JSON.stringify(vouchers));
         }
 
         // Render vouchers on the page
@@ -736,14 +697,28 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
             });
         }
 
-        // Function to use a voucher
-        function useVoucher(id) {
+        // Function to "use" a voucher - this now simulates sending data to a backend
+        async function useVoucher(id) {
             const voucherIndex = vouchers.findIndex(v => v.id === id);
             if (voucherIndex !== -1 && !vouchers[voucherIndex].used) {
+                // Simulate sending update to a backend
+                // In a real application, you would send a POST/PUT request to your server API
+                // For example: await fetch('/api/use-voucher', { method: 'POST', body: JSON.stringify({ id: id }), headers: { 'Content-Type': 'application/json' } });
+                // If the backend is successful, you would then update the local state.
+                
+                // For demonstration purposes, we update the local state temporarily.
                 vouchers[voucherIndex].used = true;
-                saveVouchers();
                 renderVouchers();
-                showMessage('Vale resgatado com sucesso! 🎉', 'success');
+                showMessage('Vale resgatado com sucesso! 🎉 (Alteração temporária)', 'success');
+                console.warn('NOTA: Esta alteração é temporária e não será persistida nem compartilhada com outros usuários sem um backend real.');
+
+                // To achieve real-time updates for ALL users, you would need:
+                // 1. A server-side API (e.g., with Node.js/Express) that stores voucher states in a database.
+                // 2. This API would update the database when a voucher is "used".
+                // 3. A mechanism like WebSockets (e.g., Socket.IO) to push updates to all connected clients
+                //    when a voucher's state changes on the server.
+                // 4. Clients would listen for these WebSocket events and update their UI accordingly.
+
             } else if (vouchers[voucherIndex].used) {
                 showMessage('Este vale já foi resgatado!', 'info');
             }
@@ -898,68 +873,29 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
             document.getElementById('music-controls').classList.remove('hidden'); // Ensures controls are visible
         }
 
+        // Load quiz state (now always initializes to unanswered)
         function loadQuizState() {
-            // Load dating date question state
-            const storedDatingDateAnswered = localStorage.getItem('datingDateAnswered');
-            const storedSelectedDatingDate = localStorage.getItem('selectedDatingDate');
+            // Quiz state will not persist across page loads or be shared
+            isDatingDateAnsweredCorrectly = false;
+            isColorAnsweredCorrectly = false;
+            selectedDatingDate = null;
+            selectedColor = null;
 
-            if (storedDatingDateAnswered === 'true' && storedSelectedDatingDate === correctDatingDate) { // Only considers correct if answered correctly
-                isDatingDateAnsweredCorrectly = true;
-                checkDatingDateButton.disabled = true;
-                datingDateFeedback.textContent = '🥳 Resposta correta! Você se lembra de tudo!';
-                datingDateFeedback.classList.add('text-green-400');
-                dateOptions.forEach(option => {
-                    option.classList.add('disabled');
-                    if (option.dataset.date === correctDatingDate) {
-                        option.classList.add('correct');
-                    }
-                });
-            } else {
-                // If incorrect or not answered, allows new attempts
-                isDatingDateAnsweredCorrectly = false;
-                checkDatingDateButton.disabled = false;
-                dateOptions.forEach(option => {
-                    option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
-                });
-                datingDateFeedback.textContent = '';
-                if (storedSelectedDatingDate && storedSelectedDatingDate !== correctDatingDate) {
-                    // If she tried before and was wrong, show a reminder
-                    datingDateFeedback.textContent = `Você tentou '${storedSelectedDatingDate}' da última vez. Tente novamente! 😉`;
-                    datingDateFeedback.classList.add('text-fuchsia-400');
-                }
-            }
+            // Reset UI for date quiz
+            checkDatingDateButton.disabled = false;
+            dateOptions.forEach(option => {
+                option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
+            });
+            datingDateFeedback.textContent = '';
 
-
-            // Load color question state
-            const storedColorAnswered = localStorage.getItem('colorAnswered');
-            const storedSelectedColor = localStorage.getItem('selectedColor');
-
-            if (storedColorAnswered === 'true' && storedSelectedColor === correctColor) { // Only considers correct if answered correctly
-                isColorAnsweredCorrectly = true;
-                checkColorAnswerButton.disabled = true;
-                colorFeedback.textContent = '🥳 Resposta correta! Você é incrível!';
-                colorFeedback.classList.add('text-green-400');
-                colorOptions.forEach(option => {
-                    option.classList.add('disabled');
-                    if (option.dataset.color === correctColor) {
-                        option.classList.add('correct');
-                    }
-                });
-            } else {
-                // If incorrect or not answered, allows new attempts
-                isColorAnsweredCorrectly = false;
-                checkColorAnswerButton.disabled = false;
-                colorOptions.forEach(option => {
-                    option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
-                });
-                colorFeedback.textContent = '';
-                if (storedSelectedColor && storedSelectedColor !== correctColor) {
-                    // If she tried before and was wrong, show a reminder
-                    colorFeedback.textContent = `Você tentou '${storedSelectedColor}' da última vez. Tente novamente! 😉`;
-                    colorFeedback.classList.add('text-fuchsia-400');
-                }
-            }
-
+            // Reset UI for color quiz
+            checkColorAnswerButton.disabled = false;
+            colorOptions.forEach(option => {
+                option.classList.remove('disabled', 'selected', 'correct', 'incorrect');
+            });
+            colorFeedback.textContent = '';
+            
+            // Initial check for unlock conditions (will be false on load)
             checkUnlockConditions();
         }
 
@@ -979,7 +915,7 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
 
             // Listener to check date answer
             checkDatingDateButton.addEventListener('click', function() {
-                if (isDatingDateAnsweredCorrectly) { // If already correct, do nothing
+                if (isDatingDateAnsweredCorrectly) { // If already correct for this session, do nothing
                     showMessage('Você já respondeu essa pergunta corretamente! 😊', 'info');
                     return;
                 }
@@ -988,10 +924,8 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
                     dateOptions.forEach(option => option.classList.remove('correct', 'incorrect'));
 
                     if (selectedDatingDate === correctDatingDate) {
-                        localStorage.setItem('datingDateAnswered', 'true'); // Saves as correct
-                        localStorage.setItem('selectedDatingDate', selectedDatingDate); // Saves the correct answer
                         isDatingDateAnsweredCorrectly = true;
-                        this.disabled = true; // Disables the button
+                        this.disabled = true; // Disables the button for the current session
 
                         document.querySelector(`.quiz-option[data-date="${correctDatingDate}"]`).classList.add('correct');
                         datingDateFeedback.textContent = '🥳 Resposta correta! Você se lembra de tudo!';
@@ -1002,7 +936,7 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
                         dateOptions.forEach(option => option.classList.add('disabled')); // Disables all options
                         
                     } else {
-                        // If incorrect, just show feedback, don't save as "answered"
+                        // If incorrect, just show feedback
                         selectedDatingDate = null; // Resets selection for next attempt
                         dateOptions.forEach(opt => opt.classList.remove('selected')); // Removes incorrect selection
                         datingDateFeedback.textContent = `Ops! A data selecionada não é a correta. Tente novamente! 😉`;
@@ -1031,7 +965,7 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
 
             // Listener to check color answer
             checkColorAnswerButton.addEventListener('click', function() {
-                if (isColorAnsweredCorrectly) { // If already correct, do nothing
+                if (isColorAnsweredCorrectly) { // If already correct for this session, do nothing
                     showMessage('Você já respondeu essa pergunta corretamente! 😊', 'info');
                     return;
                 }
@@ -1040,10 +974,8 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
                     colorOptions.forEach(option => option.classList.remove('correct', 'incorrect'));
 
                     if (selectedColor === correctColor) {
-                        localStorage.setItem('colorAnswered', 'true'); // Saves as correct
-                        localStorage.setItem('selectedColor', selectedColor); // Saves the correct answer
                         isColorAnsweredCorrectly = true;
-                        this.disabled = true; // Disables the button
+                        this.disabled = true; // Disables the button for the current session
 
                         document.querySelector(`.quiz-option[data-color="${correctColor}"]`).classList.add('correct');
                         colorFeedback.textContent = '🥳 Resposta correta! Você é incrível!';
@@ -1054,7 +986,7 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
                         colorOptions.forEach(option => option.classList.add('disabled')); // Disables all options
                         
                     } else {
-                        // If incorrect, just show feedback, don't save as "answered"
+                        // If incorrect, just show feedback
                         selectedColor = null; // Resets selection for next attempt
                         colorOptions.forEach(opt => opt.classList.remove('selected')); // Removes incorrect selection
                         colorFeedback.textContent = `Ops! A cor selecionada não é a correta. Tente novamente! 😉`;
@@ -1075,25 +1007,17 @@ Eu gosto muito de você, tipo… muito mesmo. Eu te amo, moh. 😚💗🔥💫
             const loadingOverlay = document.getElementById('loading-overlay');
             loadingOverlay.classList.add('hidden');
 
-            loadVouchers();
-            renderVouchers();
+            loadVouchers(); // Now loads vouchers from vouchers.json
             renderGallery(); // Renders the gallery on load
-            loadQuizState(); // Calls to load state and set up the interface
+            loadQuizState(); // Calls to load state and set up the interface (now always reset)
             setupQuizListeners(); // Sets up quiz button listeners
 
             // The checkUnlockConditions() call is already within loadQuizState() and the listeners.
             // Here, we just ensure the initial visibility is correct.
-            if (!(isDatingDateAnsweredCorrectly && isColorAnsweredCorrectly)) {
-                quizGate.style.display = 'block';
-                mainContentLocked.classList.remove('unlocked');
-                document.getElementById('music-controls').classList.add('hidden'); // Hides music controls
-            } else {
-                quizGate.style.display = 'none';
-                mainContentLocked.classList.add('unlocked');
-                loadSong(currentSongIndex); // Loads the first song
-                // Does not start playing here, but shows controls.
-                document.getElementById('music-controls').classList.remove('hidden'); // Shows music controls
-            }
+            // Since quiz state is no longer persistent, the quiz gate will always be visible initially.
+            quizGate.style.display = 'block';
+            mainContentLocked.classList.remove('unlocked');
+            document.getElementById('music-controls').classList.add('hidden'); // Hides music controls
 
             // Adds listeners for music buttons
             playPauseButton.addEventListener('click', togglePlayPause);
